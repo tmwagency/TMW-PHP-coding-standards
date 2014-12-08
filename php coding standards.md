@@ -78,7 +78,7 @@ plural and simple objects singular, such as:
     foreach($images as $image)
     {}
 
-===Code Commenting==
+### Code Commenting
 It's best practice if code is sufficiently commented to aid future
 developers who may have to pick it up. At the very least, all functions
 and class methods should be commented in the
@@ -377,7 +377,7 @@ as if it were anyway. This includes the following:
     a file to determine its type. Typically, resizing or resampling the
     image to the same dimensions that it should be will be sufficient.
     At a pinch, analysing the first few bytes of a file can help
-    determine the validity of a file. See [ Handling File Uploads][]
+    determine the validity of a file. See [Handling File Uploads](#handling_file_uploads)
     below for more details.
 
 <!-- -->
@@ -421,6 +421,7 @@ the frameworks' database layers behaves differently in terms of what it
 escapes before sending to the database, and it's still possible to abuse
 the DB layer object to create an SQL injection point.
 
+<a name="handling_file_uploads"></a>
 ### Handling File Uploads
 
 File uploads can often be used as an attack vector just as easily as bad
