@@ -4,23 +4,26 @@ TMW Coding Standards and Best Programming Practices for PHP
 ## Contents
 1. [Naming Conventions and Standards](#naming-conventions-and-standards)
 	1. [Code Indentation](#code-indentation)
-	2. [Trailing Whitespace](#trailing-whitespace)
-	3. [Naming Conventions](#naming-conventions)
-	4. [Code Commenting](#code-commenting)
-	5. [String Concatenation](#string-concatenation)
-	6. [Database Schemas](#database-schemas)
+	2. [Brace Usage](#brace-usage)
+	3. [Trailing Whitespace](#trailing-whitespace)
+	4. [Naming Conventions](#naming-conventions)
+	5. [Code Commenting](#code-commenting)
+	6. [String Concatenation](#string-concatenation)
 2. [Good Programming Practices](#good-programming-practices)
 	1. [KISS Principles](#kiss-principles)
 	2. [Be Mindful of the Language](#be-mindful-of-the-language)
 	3. [Clear Commenting](#clear-commenting)
-	4. [Encoding Issues & Database](#encoding-issues--database)
-	5. [Frameworks and Platforms](#frameworks-and-platforms)
-3. [Security](#security)
+	4. [Frameworks and Platforms](#frameworks-and-platforms)
+	5. [Character Encoding](#character-encoding)
+	6. [Complicated If Else Constructs](#complicated-if-else-constructs)
+3. [Databases](#databases)
+	1. [Encoding Issues & Database](#encoding-issues--database)
+4. [Security](#security)
 	1. [Treat All Incoming Data as Tainted](#treat-all-incoming-data-as-tainted)
 		1. [SQL Injection](#sql-injection)
 	2. [Handling File Uploads](#handling-file-uploads)
 	3. [Databases](#databases)
-4. [Server Environment Settings](#server-environment-settings)
+5. [Server Environment Settings](#server-environment-settings)
 	1. [Handling Redirects](#handling-redirects)
 	2. [PHP Parsing](#php-parsing)
 
@@ -61,6 +64,22 @@ or 8 spaces), which people can set to their own preference on their
 machines without affecting the way it's presented for you. This avoids
 issues with code not formatting correctly for different developers
 working on the same project.
+
+### Brace Usage
+
+If your `if()` or loop only contains one executable statement, the
+containing braces are optional, and should be omitted:
+
+	if(expression)
+		// statement
+	
+	// or...
+	
+	foreach($array as $key => $value)
+		// statement
+	
+The statement should still be indented as usual, and kept on a separate
+line for readability.
 
 ### Trailing Whitespace
 
@@ -141,44 +160,6 @@ something like one of these is preferred:
 
 The second example is better for large text blocks that might themselves
 contain quotes where escaping them becomes too messy.
-
-### Database Schemas
-
-While not strictly PHP, it's important that you can develop a well
-structured and flexible schema. This includes the following:
-
--   Using the right database encodings. Generally using utf8 for your
-    character set, and `utf8_general_ci` for your collation will be
-    enough, as this should cover the most typical types of character
-    encodings (including Cyrillic)
--   Selecting the right table engine. Typically, most MySQL tools
-    default to MyISAM or InnoDB, but it's useful to know the differences
-    between the two. MyISAM is faster for reads, slower for writes, and
-    employs table-level locking on writes, which is a potential
-    bottleneck. InnoDB is faster for writes, slower than MyISAM for
-    reads, but employs row-level locking and allows you to use foreign
-    key constraints.
--   Use the most appropriate field types. If you need a column for
-    simple yes/no values, don't use `varchar`, use something like `enum`
-    instead, as this is stored internally as an integer rather than a
-    string, which allows for better indexing, faster queries, and a
-    reduced memory and storage footprint. Integer fields should be set
-    to an appropriate length type, it makes little sense storing a list
-    of captcha question IDs in a `bigint` field, and likewise, no sense
-    storing a list of Twitter comment IDs as `tinyint`
--   Generate appropriate indexes on tables. Don't just index everything,
-    but focus on the fields that you are going to be using in joins and
-    searches. This can have a tremendous impact on your application when
-    done correctly
--   Don't be too worried about multiple joins across tables to retrieve
-    a dataset. With good indexes this won't be an issue, and embracing a
-    good relational schema allows your data to be used in more flexible
-    ways in the future as the nature of an application changes. It's
-    also a *lot* faster than iterating over multiple content sets in PHP
-    and attempting to perform the same actions there.
--   Wherever possible, join on integers (this includes dates and `enum`s
-    which are stored as integers internally) as this is a lot faster
-    than joining on strings, and indexes are often smaller.
 
 Good Programming Practices
 --------------------------
@@ -280,45 +261,6 @@ But this, not so much:
     function _aportion_other(&$data, &$labels)
     {}
 
-### Encoding Issues & Database
-
-To avoid unnecessary encoding issues ensure that all PHP scripts are
-saved as UTF8 files. Most editors and IDEs will do this automatically,
-although some on Windows platforms might need some 'encouragement' in
-this regard. Likewise, if you're using a MySQL database, ensure that the
-correct encoding is set there. MySQL has three levels of encoding:
-database, table, and field. Typically, setting it to utf8\_general\_ci
-when you create the database will ensure that it cascades down
-automatically when you create tables and fields. If you set it wrongly
-though, and attempt to retroactively correct it, you will need to do so
-at each level, as such changes only propagate downwards upon creation,
-not modification. You may also run into issues with the connection that
-PHP has with MySQL, which must also be made as UTF8. The exact
-implementation varies slightly for the different connection methods, PDO
-uses this for example:
-
-    $pdo = new PDO("mysql:dbname=$dbname;host=$dbhost",$dbuser,$dbpass, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'"));
-
-Also, when creating tables, try to use the field types that are most
-appropriate for the data they will be carrying, so things like telephone
-numbers, email addresses, names, etc, will suit the varchar type, small
-finite lists suit an enum type, etc. It can be worth being overly
-generous when specifying lengths for varchar fields also; entries won't
-use more space than they need to, but it will prevent accidental
-truncation of data. As mentioned above, take care when inserting data
-into the database, and ensure that all data is properly filtered to
-prevent SQL injection. The best method is to use parameterised PDO
-queries, but if you're using a framework or platform it may have an 
-abstracted interface for something like this. '''Avoid using the 
-'''``mysql_*`` `**`functions` `at` `all` `costs!`**
-
-If you run into issues with the “headers already sent” error, and you're
-sure there is no output occurring before you're attempting a (either
-explicitly or implied) `header()` call, then check to see if you're
-editor/IDE has added a byte order mark (BOM). PHP doesn't play well with
-these, and it can trigger some unusual bugs, so BOMs should be removed
-whenever possible in source code.
-
 ### Frameworks and Platforms
 
 If you're using a framework or other platform you should follow the best
@@ -349,6 +291,123 @@ Some of the CMS platforms we use are:
 -   Expression Engine (*suggest this as a solution only if your life is
     threatened or you really don't care about your fellow developers*)
 -   EZPublish
+
+### Character Encoding
+
+To avoid unnecessary encoding issues ensure that all PHP scripts are
+saved as UTF8 files. Most editors and IDEs will do this automatically,
+although some on Windows platforms might need some 'encouragement' in
+this regard. Occassionally you might run into files saved as UTF8 not
+behaving correctly in the PHP parser. You should check to see if the
+file has been saved with a BOM (byte order mark) which has been known
+to cause strange output.
+
+That is usually enough to trigger Apache to output the right encoding
+headers, but if it's been set to a different default, or you're using
+PHP on IIS, then it may be necessary to use the following code to
+force the correct encoding:
+
+`header('Content-Type: text/html; charset=utf-8');`
+
+### Complicated If Else Constructs
+
+An if/else construct should never go beyond a few else cases. If you're
+writing code with more than 2 or 3 else parts, then you should be using
+a switch/case instead.
+
+If you are using the else cases to check different variables, then you
+may still use a switch, but of this form:
+
+	switch(true)
+	{
+		case ($a == 'test'):
+			break;
+		case ($b < 10):
+			break;
+		case (count($c)):
+			break;
+	}
+	
+This slight abuse of the switch also works in JavaScript!
+
+Databases
+---------
+
+While not strictly PHP, it's important that you can develop a well
+structured and flexible schema. This includes the following:
+
+-   Using the right database encodings. Generally using utf8 for your
+    character set, and `utf8_general_ci` for your collation will be
+    enough, as this should cover the most typical types of character
+    encodings (including Cyrillic)
+-   Selecting the right table engine. Typically, most MySQL tools
+    default to MyISAM or InnoDB, but it's useful to know the differences
+    between the two. MyISAM is faster for reads, slower for writes, and
+    employs table-level locking on writes, which is a potential
+    bottleneck. InnoDB is faster for writes, slower than MyISAM for
+    reads, but employs row-level locking and allows you to use foreign
+    key constraints.
+-   Use the most appropriate field types. If you need a column for
+    simple yes/no values, don't use `varchar`, use something like `enum`
+    instead, as this is stored internally as an integer rather than a
+    string, which allows for better indexing, faster queries, and a
+    reduced memory and storage footprint. Integer fields should be set
+    to an appropriate length type, it makes little sense storing a list
+    of captcha question IDs in a `bigint` field, and likewise, no sense
+    storing a list of Twitter comment IDs as `tinyint`
+-   Generate appropriate indexes on tables. Don't just index everything,
+    but focus on the fields that you are going to be using in joins and
+    searches. This can have a tremendous impact on your application when
+    done correctly
+-   Don't be too worried about multiple joins across tables to retrieve
+    a dataset. With good indexes this won't be an issue, and embracing a
+    good relational schema allows your data to be used in more flexible
+    ways in the future as the nature of an application changes. It's
+    also a *lot* faster than iterating over multiple content sets in PHP
+    and attempting to perform the same actions there.
+-   Wherever possible, join on integers (this includes dates and `enum`s
+    which are stored as integers internally) as this is a lot faster
+    than joining on strings, and indexes are often smaller.
+-   Plan your schema in advance and think about how different parts of the
+    data interact with each other. Your database is not a spreadsheet, and
+    you shouldn't treat it like it is.
+    
+### Encoding Issues & Database
+
+It is always best to ensure that the correct encoding
+is set for your database(es). MySQL has three levels of encoding:
+database, table, and field. Typically, setting it to utf8\_general\_ci
+when you create the database will ensure that it cascades down
+automatically when you create tables and fields. If you set it wrongly
+though, and attempt to retroactively correct it, you will need to do so
+at each level, as such changes only propagate downwards upon creation,
+not modification. You may also run into issues with the connection that
+PHP has with MySQL, which must also be made as UTF8. The exact
+implementation varies slightly for the different connection methods, PDO
+uses this for example:
+
+    $pdo = new PDO("mysql:dbname=$dbname;host=$dbhost",$dbuser,$dbpass, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'"));
+
+Also, when creating tables, try to use the field types that are most
+appropriate for the data they will be carrying, so things like telephone
+numbers, email addresses, names, etc, will suit the varchar type, small
+finite lists suit an enum type, etc. It can be worth being overly
+generous when specifying lengths for varchar fields also; entries won't
+use more space than they need to, but it will prevent accidental
+truncation of data. As mentioned above, take care when inserting data
+into the database, and ensure that all data is properly filtered to
+prevent SQL injection. The best method is to use parameterised PDO
+queries, but if you're using a framework or platform it may have an 
+abstracted interface for something like this.
+
+**Avoid using the** `mysql_*` **functions at all costs!**
+
+If you run into issues with the "headers already sent" error, and you're
+sure there is no output occurring before you're attempting a (either
+explicitly or implied) `header()` call, then check to see if you're
+editor/IDE has added a byte order mark (BOM). PHP doesn't play well with
+these, and it can trigger some unusual bugs, so BOMs should be removed
+whenever possible in source code.
 
 Security
 --------
