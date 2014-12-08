@@ -1,6 +1,29 @@
 TMW Coding Standards and Best Programming Practices for PHP
 ===========================================================
 
+## Contents
+1. [Naming Conventions and Standards](#naming-conventions-and-standards)
+	1. [Code Indentation](#code-indentation)
+	2. [Trailing Whitespace](#trailing-whitespace)
+	3. [Naming Conventions](#naming-conventions)
+	4. [Code Commenting](#code-commenting)
+	5. [String Concatenation](#string-concatenation)
+	6. [Database Schemas](#database-schemas)
+2. [Good Programming Practices](#good-programming-practices)
+	1. [KISS Principles](#kiss-principles)
+	2. [Be Mindful of the Language](#be-mindful-of-the-language)
+	3. [Clear Commenting](#clear-commenting)
+	4. [Encoding Issues & Database](#encoding-issues--database)
+	5. [Frameworks and Platforms](#frameworks-and-platforms)
+3. [Security](#security)
+	1. [Treat All Incoming Data as Tainted](#treat-all-incoming-data-as-tainted)
+		1. [SQL Injection](#sql-injection)
+	2. [Handling File Uploads](#handling-file-uploads)
+	3. [Databases](#databases)
+4. [Server Environment Settings](#server-environment-settings)
+	1. [Handling Redirects](#handling-redirects)
+	2. [PHP Parsing](#php-parsing)
+
 Naming Conventions and Standards
 --------------------------------
 
@@ -377,7 +400,7 @@ as if it were anyway. This includes the following:
     a file to determine its type. Typically, resizing or resampling the
     image to the same dimensions that it should be will be sufficient.
     At a pinch, analysing the first few bytes of a file can help
-    determine the validity of a file. See [Handling File Uploads](#handling_file_uploads)
+    determine the validity of a file. See [Handling File Uploads](#handling-file-uploads)
     below for more details.
 
 <!-- -->
@@ -421,7 +444,6 @@ the frameworks' database layers behaves differently in terms of what it
 escapes before sending to the database, and it's still possible to abuse
 the DB layer object to create an SQL injection point.
 
-<a name="handling_file_uploads"></a>
 ### Handling File Uploads
 
 File uploads can often be used as an attack vector just as easily as bad
