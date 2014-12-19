@@ -33,8 +33,9 @@
 <xsl:template match="code" mode="content">
 	<xsl:choose>
 		<xsl:when test="@style = 'block'">
-			<xsl:text>&#xa;</xsl:text>
+			<xsl:text>&#xa;```</xsl:text>
 			<xsl:value-of select="text()"/>
+			<xsl:text>&#xa;```&#xa;</xsl:text>
 		</xsl:when>
 		<xsl:otherwise>
 			<xsl:text>`</xsl:text><xsl:value-of select="text()"/><xsl:text>`</xsl:text>
