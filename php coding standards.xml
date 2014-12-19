@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
 <coding_standards>
 
 	<title>TMW Coding Standards and Best Programming Practices for PHP</title>
@@ -8,14 +7,14 @@
 	<section title="Naming Conventions and Standards">
 		<h2>Code Indentation</h2>
 		<p>Generally you should use the Allman style (http://en.wikipedia.org/wiki/Indent\_style\#Allman\_style) of indenting code. This puts opening braces onto a new line of their own, such that they line up vertically:</p>
-		<code style="block"><![CDATA[
+		<code style="block" lang="php"><![CDATA[
 if(expression)
 {
 	// statements
 }
 ]]></code>
 		<p>This will differ slightly from the indentation style mainly used for Javascript (like K&amp;R), but there are valid cases where the Allman style would cause syntactic differences in code execution (such as implied return values in Javascript because the semicolon is optional). The advantage to the Allman style (aside from visually outlining logical blocks of code) is that the expression part can be commented out leaving the statements part intact and others easily added during testing and development:</p>
-		<code style="block"><![CDATA[
+		<code style="block" lang="php"><![CDATA[
 //for($i=0; $i<count($array); $i++)
 foreach($array as $key => $value)
 {
@@ -26,7 +25,7 @@ foreach($array as $key => $value)
 		
 		<h2>Brace Usage</h2>
 		<p>If your <code>if()</code> or loop only contains one executable statement, the containing braces are optional, and should be omitted:</p>
-		<code style="block"><![CDATA[
+		<code style="block" lang="php"><![CDATA[
 if(expression)
 	// statement
 
@@ -42,19 +41,19 @@ foreach($array as $key => $value)
 		
 		<h2>Naming Conventions</h2>
 		<p>Classes, constants and variables should follow the Python/Ruby naming conventions (<a href="http://en.wikipedia.org/wiki/Naming\_convention\_%28programming%29\#Python\_and\_Ruby">http://en.wikipedia.org/wiki/Naming\_convention\_%28programming%29\#Python\_and\_Ruby</a>) where class names use camel case, constants are all caps with underscores used to space, and other variables and method/function names are lower-case with underscores used to space. All variables, constants and functions should use logical names without unnecessary abbreviations but not be overly verbose. So, the following are good:</p>
-		<code style="block"><![CDATA[
+		<code style="block" lang="php"><![CDATA[
 $error_message
 DB_USERNAME
 get_all_news_content()
 ]]></code>
 		<p>But the following are not:</p>
-		<code style="block"><![CDATA[
+		<code style="block" lang="php"><![CDATA[
 $a
 LONG_CONSTANT_DESCRIBING_THE_NATURE_OF_THE_VALUE_IT_CONTAINS_WHERE_A_COMMENT_WOULD_DO
 do_something()
 ]]></code>
 		<p>There are a few occasions where single-letter variables can be used, such as counters in small loops, or when dealing with coordinate systems or colour models, for example, but in the main variable names should always reflect the data they contain. If you feel there might be any ambiguity when initially declaring them, add a comment to indicate this. It can also be helpful to make variable names for things like arrays plural and simple objects singular, such as:</p>
-		<code style="block"><![CDATA[
+		<code style="block" lang="php"><![CDATA[
 $images = array(1, 2, 3, 4);
 foreach($images as $image)
 {}
@@ -63,7 +62,7 @@ foreach($images as $image)
 		<h2>Code Commenting</h2>
 		<p>It's best practice if code is sufficiently commented to aid future developers who may have to pick it up. At the very least, all functions and class methods should be commented in the <a href="http://phpdoc.org/docs/latest/glossary.html#term-docblocks">DocBlock</a> format, and should contain a brief description about that function, and details on the inputs and outputs. A decent IDE should be able to automatically supply a lot of these details for you when you open the DocBlock with `/**` and hit enter.</p>
 		<p>Below is an example:</p>
-		<code style="block"><![CDATA[
+		<code style="block" lang="php"><![CDATA[
 /**
 * return a filtered string
 * @param string $filter_line the string to be filtered
@@ -77,11 +76,11 @@ public function filter_string($filter_line, $replace_char='*')
 
 		<h2>String Concatenation</h2>
 		<p>It's typical in JavaScript to build up strings with lots of concatenation like this:</p>
-		<code style="block"><![CDATA[
+		<code style="block" lang="js"><![CDATA[
 var greeting = 'hello ' + name[0] + ' ' + name[1] + ', welcome.';
 ]]></code>
 		<p>This is bad practice in PHP; it makes the code look messy. Instead, something like one of these is preferred:</p>
-		<code style="block"><![CDATA[
+		<code style="block" lang="php"><![CDATA[
 $greeting = "hello {$name[0]} {$name[1]}, welcome.";
 
 $greeting =<<<GREETING
@@ -99,7 +98,7 @@ GREETING;
 
 		<h2>Be Mindful of the Language</h2>
 		<p>PHP is a loose-typed language, and as such can often behave in what looks like an unexpected way if you're used to stricter languages. One main thing to bear in mind is comparison operators. For example:</p>
-		<code style="block"><![CDATA[
+		<code style="block" lang="php"><![CDATA[
 $string = "Test string";
 if(strpos($string, "T"))
 {
@@ -107,7 +106,7 @@ if(strpos($string, "T"))
 }
 ]]></code>
 		<p>This example will never execute the statements inside the braces because the first character position match (0, as strings are treated somewhat similarly to C++ strings in PHP) equates to a false value due to the loose typing. Instead, this should be used:</p>
-		<code style="block"><![CDATA[
+		<code style="block" lang="php"><![CDATA[
 $string = "Test string";
 if(strpos($string, "T") !== false)  // test explicitly for non-false values
 {
@@ -115,7 +114,7 @@ if(strpos($string, "T") !== false)  // test explicitly for non-false values
 }
 ]]></code>
 		<p>PHP is also quite forgiving of some things, so code might still work if you try to treat a string as an array of characters, but it might exhibit strange behaviour in certain circumstances, just as code will function if you try treating a variable of one type as another, but it may not work as expected under all conditions, even though PHP is a loosely typed language. The following illustrates this:</p>
-		<code style="block"><![CDATA[
+		<code style="block" lang="php"><![CDATA[
 $string = "tested";
 $chess = "♔♕♖♗♘♙";
 
@@ -133,7 +132,7 @@ string(18) "a��♕♖♗♘♙"
 
 		<h2>Clear Commenting</h2>
 		<p>If possible, all class methods and functions you write should be documented with PHPDoc syntax. This gives a consistent commenting style that can be used to generate documentation if needed. Try to be verbose in the comments if something is not immediately obvious, and explain all inputs and outputs. So, this would be an example of good commenting:</p>
-		<code style="block"><![CDATA[
+		<code style="block" lang="php"><![CDATA[
 /**
 * returns an array containg the data count for the 'other' portion and the 
 * index of the key at which the other count was started
@@ -147,7 +146,7 @@ function _aportion_other(&$data, &$labels)
 {}
 ]]></code>
 		<p>But this, not so much:</p>
-		<code style="block"><![CDATA[
+		<code style="block" lang="php"><![CDATA[
 /**
 * modifies the data and label arrays
 * @param array $data
@@ -176,14 +175,14 @@ function _aportion_other(&$data, &$labels)
 		<h2>Character Encoding</h2>
 		<p>To avoid unnecessary encoding issues ensure that all PHP scripts are saved as UTF8 files. Most editors and IDEs will do this automatically, although some on Windows platforms might need some 'encouragement' in this regard. Occassionally you might run into files saved as UTF8 not behaving correctly in the PHP parser. You should check to see if the file has been saved with a BOM (byte order mark) which has been known to cause strange output.</p>
 		<p>That is usually enough to trigger Apache to output the right encoding headers, but if it's been set to a different default, or you're using PHP on IIS, then it may be necessary to use the following code to force the correct encoding:</p>
-		<code style="block"><![CDATA[
+		<code style="block" lang="php"><![CDATA[
 header('Content-Type: text/html; charset=utf-8');
 ]]></code>
 
 		<h2>Complicated If Else Constructs</h2>
 		<p>An if/else construct should never go beyond a few else cases. If you're writing code with more than 2 or 3 else parts, then you should be using a switch/case instead.</p>
 		<p>If you are using the else cases to check different variables, then you may still use a switch, but of this form:</p>
-		<code style="block"><![CDATA[
+		<code style="block" lang="php"><![CDATA[
 switch(true)
 {
 	case ($a == 'test'):
@@ -211,7 +210,7 @@ switch(true)
 		
 		<h3>Encoding Issues &amp; Database</h3>
 		<p>It is always best to ensure that the correct encoding is set for your database(es). MySQL has three levels of encoding: database, table, and field. Typically, setting it to <code>utf8_general_ci</code> when you create the database will ensure that it cascades down automatically when you create tables and fields. If you set it wrongly though, and attempt to retroactively correct it, you will need to do so at each level, as such changes only propagate downwards upon creation, not modification. You may also run into issues with the connection that PHP has with MySQL, which must also be made as UTF8. The exact implementation varies slightly for the different connection methods, PDO uses this for example:</p>
-		<code style="block"><![CDATA[
+		<code style="block" lang="php"><![CDATA[
 $pdo = new PDO("mysql:dbname=$dbname;host=$dbhost",$dbuser,$dbpass, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'"));
 ]]></code>
 		<p>Also, when creating tables, try to use the field types that are most appropriate for the data they will be carrying, so things like telephone numbers, email addresses, names, etc, will suit the varchar type, small finite lists suit an enum type, etc. It can be worth being overly generous when specifying lengths for varchar fields also; entries won't use more space than they need to, but it will prevent accidental truncation of data. As mentioned above, take care when inserting data into the database, and ensure that all data is properly filtered to prevent SQL injection. The best method is to use parameterised PDO queries, but if you're using a framework or platform it may have an abstracted interface for something like this.</p>
@@ -250,7 +249,7 @@ $pdo = new PDO("mysql:dbname=$dbname;host=$dbhost",$dbuser,$dbpass, array(PDO::M
 	
 	<section title="Local Development Environment">
 		<p>Your local development environment should always have all errors and warnings displayed. The best way to do this is from within the php.ini file, with the following configuration:</p>
-		<code style="block"><![CDATA[
+		<code style="block" lang="ini"><![CDATA[
 display_errors = On
 error_reporting = E_ALL
 ]]></code>
