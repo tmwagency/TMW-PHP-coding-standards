@@ -94,7 +94,7 @@ GREETING;
 		<h2>KISS Principles</h2>
 		<p>As with any language, avoid functions/methods in PHP that are overly long. Typically, anything that can not fit comfortably into a standard screen of code (this is deliberately subjective, as it may vary from project to project) is too long, and should be refactored. Follow the Unix philosophy and write small methods that do one job well. If you have a method or function which performs several tasks then consider splitting these out.</p>
 		<p>Avoid over engineering a solution to a problem. A simple holding page does not necessarily need a large framework and database behind it. Be aware that a sledgehammer is not always the ideal tool to crack a nut.</p>
-		<p>Also, omit the closing <code>?></code> tag on scripts if there is no output to follow within the same file, the PHP parser will automatically close it if it's left out. This negates the chance of running into a “headers already sent” error, which can be cause by trailing whitespace (a space, newline, etc) after the closing PHP tag.</p>
+		<p>Also, omit the closing <code>?&gt;</code> tag on scripts if there is no output to follow within the same file, the PHP parser will automatically close it if it's left out. This negates the chance of running into a “headers already sent” error, which can be cause by trailing whitespace (a space, newline, etc) after the closing PHP tag.</p>
 
 		<h2>Be Mindful of the Language</h2>
 		<p>PHP is a loose-typed language, and as such can often behave in what looks like an unexpected way if you're used to stricter languages. One main thing to bear in mind is comparison operators. For example:</p>

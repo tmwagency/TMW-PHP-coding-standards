@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:strip-space elements="*"/>
 
 <xsl:template match="/coding_standards">
@@ -34,12 +34,12 @@
 		<xsl:when test="@style = 'block'">
 			<xsl:text>&#xa;</xsl:text>
 			<pre>
-			<xsl:value-of select="text()"/>
+			<xsl:value-of select="text()" disable-output-escaping="yes"/>
 			</pre>
 			<xsl:text>&#xa;</xsl:text>
 		</xsl:when>
 		<xsl:otherwise>
-			<code><xsl:value-of select="text()"/></code>
+			<code><xsl:value-of select="text()" disable-output-escaping="yes"/></code>
 		</xsl:otherwise>
 	</xsl:choose>
 </xsl:template>
