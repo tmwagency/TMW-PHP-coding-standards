@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="html.xsl"?>
 
 <coding_standards>
 
@@ -6,7 +7,7 @@
 	
 	<section title="Naming Conventions and Standards">
 		<h2>Code Indentation</h2>
-		<p>Generally you should use the Allman style (http://en.wikipedia.org/wiki/Indent\_style\#Allman\_style) of indenting code. This puts opening braces onto a new line of their own, such that they line up vertically:</p>
+		<p>Generally you should use the Allman style (<a href="http://en.wikipedia.org/wiki/Indent_style#Allman_style">http://en.wikipedia.org/wiki/Indent_style#Allman_style</a>) of indenting code. This puts opening braces onto a new line of their own, such that they line up vertically:</p>
 		<code style="block" lang="php"><![CDATA[
 if(expression)
 {
@@ -208,7 +209,7 @@ switch(true)
 			<li>Plan your schema in advance and think about how different parts of the data interact with each other. Your database is not a spreadsheet, and you shouldn't treat it like it is.</li>
 		</ul>
 		
-		<h3>Encoding Issues &amp; Database</h3>
+		<h2>Encoding Issues &amp; Database</h2>
 		<p>It is always best to ensure that the correct encoding is set for your database(es). MySQL has three levels of encoding: database, table, and field. Typically, setting it to <code>utf8_general_ci</code> when you create the database will ensure that it cascades down automatically when you create tables and fields. If you set it wrongly though, and attempt to retroactively correct it, you will need to do so at each level, as such changes only propagate downwards upon creation, not modification. You may also run into issues with the connection that PHP has with MySQL, which must also be made as UTF8. The exact implementation varies slightly for the different connection methods, PDO uses this for example:</p>
 		<code style="block" lang="php"><![CDATA[
 $pdo = new PDO("mysql:dbname=$dbname;host=$dbhost",$dbuser,$dbpass, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'"));
