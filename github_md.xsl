@@ -13,7 +13,7 @@
 <xsl:template match="section">
 	<xsl:text>&#xa;</xsl:text>
 	<xsl:variable name="section_title"><xsl:value-of select="translate(@title, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ ', 'abcdefghijklmnopqrstuvwxyz-')"/></xsl:variable>
-	<a name="{$section_title}"></a>
+	<a name="{$section_title}">&#160;</a>
 	<xsl:value-of select="@title"/><xsl:text>&#xa;</xsl:text>
 	<xsl:value-of select="substring('----------------------------------------------------------------------------------------------------------------------------------------', 1, string-length(@title))"/>
 	
@@ -24,14 +24,14 @@
 <xsl:template match="h2" mode="content">
 	<xsl:text>&#xa;### </xsl:text>
 	<xsl:variable name="h2"><xsl:value-of select="translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ ', 'abcdefghijklmnopqrstuvwxyz-')"/></xsl:variable>
-	<a name="{$h2}"></a>
+	<a name="{$h2}">&#160;</a>
 	<xsl:value-of select="text()"/>
 </xsl:template>
 
 <xsl:template match="h3" mode="content">
 	<xsl:text>&#xa;#### </xsl:text>
 	<xsl:variable name="h3"><xsl:value-of select="translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ ', 'abcdefghijklmnopqrstuvwxyz-')"/></xsl:variable>
-	<a name="{$h3}"></a>
+	<a name="{$h3}">&#160;</a>
 	<xsl:value-of select="text()"/>
 </xsl:template>
 
