@@ -63,7 +63,7 @@
 </xsl:template>
 
 <xsl:template match="a" mode="content">
-	<xsl:text>[&lt;</xsl:text><xsl:value-of select="@href"/>&gt;, <xsl:value-of select="text()"/><xsl:text>]</xsl:text>
+	<xsl:text>[</xsl:text><xsl:value-of select="text()"/><xsl:text>](</xsl:text><xsl:value-of select="@href"/><xsl:text>)</xsl:text>
 </xsl:template>
 
 <xsl:template match="em" mode="content">
