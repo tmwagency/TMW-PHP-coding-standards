@@ -442,7 +442,8 @@ Also, don't blindly apply all levels of sanitisation to your data as soon as you
 
 ### <a name="email-spam-relay-prevention"> </a>Email Spam Relay Prevention
 When your application is sending out any emails, you should pay attention to what user data you're passing into it, as there are ways to inject parameters into that and effectively turn your email code into a spam relay. So, for example, pass all the user variables through something like this to strip out any attempt to inject email headers into a message: 
- `
+
+```php
 function remove_headers($string)
 {
 	$headers = array(
@@ -456,7 +457,9 @@ function remove_headers($string)
 		);
 	return preg_replace($headers, '', $string);
 }
-		` 
+		
+```
+
 This will at the least ensure that the user is not injecting an extra  `Cc`  header, for example, into your email code, which could be used to send out their message to more recipients using your email server! 
 
 <a name="local-development-environment"> </a>Local Development Environment
