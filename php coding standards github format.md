@@ -417,8 +417,7 @@ r\\]|\\.)*\](?:(?:\r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\]
 .(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z
 |(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*))*\>(?:(
 ?:\r\n)?[ \t])*))*)?;\s*)
-
-		` 
+` 
 This is not something you want in your code, ever. Use the filter_var() function, which has email validation support built in. 
 
 ### <a name="sql-injection"> </a>SQL Injection
@@ -457,7 +456,7 @@ function remove_headers($string)
 		);
 	return preg_replace($headers, '', $string);
 }
-		
+
 ```
 
 This will at the least ensure that the user is not injecting an extra  `Cc`  header, for example, into your email code, which could be used to send out their message to more recipients using your email server! 

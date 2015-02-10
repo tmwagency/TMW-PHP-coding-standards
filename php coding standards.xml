@@ -318,8 +318,7 @@ r\\]|\\.)*\](?:(?:\r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\]
 .(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z
 |(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*))*\>(?:(
 ?:\r\n)?[ \t])*))*)?;\s*)
-]]>
-		</code>
+]]></code>
 		<p>This is not something you want in your code, ever. Use the filter_var() function, which has email validation support built in. </p>
 		
 		<h2>SQL Injection</h2>
@@ -339,7 +338,7 @@ r\\]|\\.)*\](?:(?:\r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\]
 		<h2>Email Spam Relay Prevention</h2>
 		<p>When your application is sending out any emails, you should pay attention to what user data you're passing into it, as there are ways to inject parameters into that and effectively turn your email code into a spam relay. So, for example, pass all the user variables through something like this to strip out any attempt to inject email headers into a message: </p>
 		
-		<code style="block" lang="php">
+		<code style="block" lang="php"><![CDATA[
 function remove_headers($string)
 {
 	$headers = array(
@@ -353,7 +352,7 @@ function remove_headers($string)
 		);
 	return preg_replace($headers, '', $string);
 }
-		</code>
+]]></code>
 		<p>This will at the least ensure that the user is not injecting an extra <code>Cc</code> header, for example, into your email code, which could be used to send out their message to more recipients using your email server! </p>
 	</section>
 	
