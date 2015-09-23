@@ -418,8 +418,8 @@ It's always important to remember that any data coming from the user has the pot
 
 #### <a name="do-not-reinvent-the-wheel"> </a>Do Not Reinvent the Wheel
 As tempting as it might be to write the best regular expression of your life to validate an email address, don't do it. It will never match the ISO specification, and it will be cumbersome to ever debug. Here's an example of a regular expression that is the closest case to matching the ISO specification for email address format [http://www.ex-parrot.com/pdw/Mail-RFC822-Address.html](http://www.ex-parrot.com/pdw/Mail-RFC822-Address.html) :
- `
-		
+
+```
 (?:(?:\r\n)?[ \t])*(?:(?:(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t]
 )+|\Z|(?=[\["()<>@,;:\\".\[\]]))|"(?:[^\"\r\\]|\\.|(?:(?:\r\n)?[ \t]))*"(?:(?:
 \r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(
@@ -502,7 +502,9 @@ r\\]|\\.)*\](?:(?:\r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\]
 .(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z
 |(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*))*\>(?:(
 ?:\r\n)?[ \t])*))*)?;\s*)
-` 
+
+```
+
 This is not something you want in your code, ever. Use the  `filter_var()` 	function, which has email validation support built in. 
 
 ### <a name="sql-injection"> </a>SQL Injection

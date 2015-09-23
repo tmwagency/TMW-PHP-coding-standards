@@ -300,8 +300,7 @@ switch(true)
 		
 		<h3>Do Not Reinvent the Wheel</h3>
 		<p>As tempting as it might be to write the best regular expression of your life to validate an email address, don't do it. It will never match the ISO specification, and it will be cumbersome to ever debug. Here's an example of a regular expression that is the closest case to matching the ISO specification for email address format <a href="http://www.ex-parrot.com/pdw/Mail-RFC822-Address.html">http://www.ex-parrot.com/pdw/Mail-RFC822-Address.html</a> :</p>
-		<code class="block">
-		<![CDATA[
+		<code style="block"><![CDATA[
 (?:(?:\r\n)?[ \t])*(?:(?:(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t]
 )+|\Z|(?=[\["()<>@,;:\\".\[\]]))|"(?:[^\"\r\\]|\\.|(?:(?:\r\n)?[ \t]))*"(?:(?:
 \r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(
