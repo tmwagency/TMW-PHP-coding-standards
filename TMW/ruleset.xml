@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<ruleset name="TMW">
+	<description>A custom coding standard for TMWs PHP work</description>
+	
+	<!-- Pear rules -->
+	<rule ref="PEAR.Classes"/>
+	<rule ref="PEAR.Commenting">
+		<exclude name="PEAR.Commenting.FileComment"/>
+		<exclude name="PEAR.Commenting.ClassComment"/>
+	</rule>
+	<rule ref="PEAR.Files"/>
+	<rule ref="PEAR.Functions">
+		<exclude name="PEAR.Functions.FunctionCallSignature"/>
+	</rule>
+	<rule ref="PEAR.NamingConventions">
+		<exclude name="PEAR.NamingConventions.ValidClassName"/>
+		<exclude name="PEAR.NamingConventions.ValidFunctionName"/>
+	</rule>
+
+	<!-- Generic Rules -->
+	<rule ref="Generic.CodeAnalysis.EmptyStatement"/>
+	<rule ref="Generic.CodeAnalysis.JumbledIncrementer"/>
+	<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>
+	<rule ref="Generic.Commenting.Fixme"/>
+	<rule ref="Generic.Commenting.Todo"/>
+	<rule ref="Generic.Files.ByteOrderMark"/>
+	<rule ref="Generic.Files.EndFileNewline"/>
+	<rule ref="Generic.Functions.OpeningFunctionBraceBsdAllman"/>
+	<rule ref="Generic.Functions.FunctionCallArgumentSpacing"/>
+	<rule ref="Generic.Metrics.NestingLevel"/>
+	<rule ref="Generic.Metrics.CyclomaticComplexity"/>
+	<rule ref="Generic.NamingConventions.ConstructorName"/>
+	<rule ref="Generic.PHP.CharacterBeforePHPOpeningTag"/>
+	<rule ref="Generic.PHP.DeprecatedFunctions"/>
+	<rule ref="Generic.PHP.DisallowShortOpenTag"/>
+	<rule ref="Generic.PHP.NoSilencedErrors"/>
+	<rule ref="Generic.PHP.Syntax"/>
+	<rule ref="Generic.Strings.UnnecessaryStringConcat"/>
+	<rule ref="Generic.WhiteSpace.DisallowSpaceIndent"/>
+	
+	<!-- PSR2 Rules -->
+	<rule ref="PSR2.ControlStructures.ElseIfDeclaration"/>
+	<rule ref="PSR2.Files.ClosingTag"/>
+	<rule ref="PSR2.Namespaces"/>
+	
+	<!-- Squiz Rules -->
+	<rule ref="Squiz.Arrays.ArrayBracketSpacing"/>
+	<rule ref="Squiz.Classes">
+		<exclude name="Squiz.Classes.DuplicateProperty"/>
+		<exclude name="Squiz.Classes.ValidClassName"/>
+	</rule>
+	<rule ref="Squiz.Commenting.EmptyCatchComment"/>
+	<rule ref="Squiz.Commenting.LongConditionClosingComment"/>
+	<rule ref="Squiz.ControlStructures.ForEachLoopDeclaration"/>
+	<rule ref="Squiz.ControlStructures.ForLoopDeclaration"/>
+	<rule ref="Squiz.ControlStructures.LowercaseDeclaration"/>
+	<rule ref="Squiz.Functions.GlobalFunction"/>
+	<rule ref="Squiz.Functions.LowercaseFunctionKeywords"/>
+	<rule ref="Squiz.Operators.ValidLogicalOperators"/>
+	<rule ref="Squiz.PHP.CommentedOutCode"/>
+	<rule ref="Squiz.PHP.DisallowObEndFlush"/>
+	<rule ref="Squiz.PHP.DiscouragedFunctions"/>
+	<rule ref="Squiz.PHP.EmbeddedPhp"/>
+	<rule ref="Squiz.PHP.Eval"/>
+	<rule ref="Squiz.PHP.ForbiddenFunctions"/>
+	<rule ref="Squiz.PHP.GlobalKeyword"/>
+	<rule ref="Squiz.PHP.InnerFunctions"/>
+	<rule ref="Squiz.Scope"/>
+	<rule ref="Squiz.Strings">
+		<exclude name="Squiz.Strings.ConcatenationSpacing"/>
+	</rule>
+	<rule ref="Squiz.WhiteSpace.LanguageConstructSpacing"/>
+	<rule ref="Squiz.WhiteSpace.MemberVarSpacing"/>
+	<rule ref="Squiz.WhiteSpace.ScopeClosingBrace"/>
+	<rule ref="Squiz.WhiteSpace.ScopeKeywordSpacing"/>
+	<rule ref="Squiz.WhiteSpace.SemicolonSpacing"/>
+	
+	<!-- TMW Rules -->
+	<rule ref="TMW.Commenting"/>
+	<rule ref="TMW.Functions"/>
+	<rule ref="TMW.NamingConventions"/>
+</ruleset>
