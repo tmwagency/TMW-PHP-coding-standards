@@ -1,6 +1,6 @@
-<?xml version="1.0"?>
-TMW Coding Standards and Best Programming Practices for PHP
-===========================================================
+
+# TMW Coding Standards and Best Programming Practices for PHP
+
 
 ## Contents
 
@@ -11,21 +11,24 @@ TMW Coding Standards and Best Programming Practices for PHP
 	1. [Naming Conventions](#naming-conventions)
 	1. [Code Commenting](#code-commenting)
 	1. [String Concatenation](#string-concatenation)
+	1. [If Statement Complexity](#if-statement-complexity)
+	1. [Database Schemas](#database-schemas)
 1. [Good Programming Practices](#good-programming-practices)
 	1. [KISS Principles](#kiss-principles)
 	1. [Be Mindful of the Language](#be-mindful-of-the-language)
+	1. [Be Aware of PHP Variable Types](#be-aware-of-php-variable-types)
 	1. [Clear Commenting](#clear-commenting)
-	1. [Frameworks and Platforms](#frameworks-and-platforms)
-	1. [Character Encoding](#character-encoding)
-	1. [Complicated If Else Constructs](#complicated-if-else-constructs)
-1. [Databases](#databases)
 	1. [Encoding Issues &amp; Database](#encoding-issues-&amp;-database)
+	1. [Frameworks and Platforms](#frameworks-and-platforms)
+	1. [Reinventing the Wheel](#reinventing-the-wheel)
+	1. [Complicated If Else Constructs](#complicated-if-else-constructs)
 1. [Security](#security)
 	1. [Treat All Incoming Data as Tainted](#treat-all-incoming-data-as-tainted)
 	1. [SQL Injection](#sql-injection)
 	1. [Handling File Uploads](#handling-file-uploads)
 	1. [Databases](#databases)
 	1. [Email Spam Relay Prevention](#email-spam-relay-prevention)
+	1. [Accidental Validation Exclusions](#accidental-validation-exclusions)
 		1. [Do Not Reinvent the Wheel](#do-not-reinvent-the-wheel)
 1. [Local Development Environment](#local-development-environment)
 1. [Server Environment Settings](#server-environment-settings)
@@ -84,6 +87,7 @@ Classes, constants and variables should follow the Python/Ruby naming convention
 $error_message
 DB_USERNAME
 get_all_news_content()
+$this->json['navigation']['product_heading']
 
 ```
 
@@ -93,6 +97,7 @@ But the following are not:
 $a
 LONG_CONSTANT_DESCRIBING_THE_NATURE_OF_THE_VALUE_IT_CONTAINS_WHERE_A_COMMENT_WOULD_DO
 do_something()
+$this->json['navigation']['nav1Heading']
 
 ```
 
@@ -143,6 +148,71 @@ GREETING;
 ```
 
 The second example is better for large text blocks that might themselves contain quotes where escaping them becomes too messy.
+
+While it's possible, it's considered bad practice to break in and out of  `<?php ?>`  tags like this: 
+
+```php
+<?php
+if(condition)
+{
+?>
+    <div>some HTML here</div>
+    <div>stuff</div>
+<?php
+}
+
+if(condition2)
+{
+?>
+    <div>some HTML here</div>
+    <div>stuff</div>
+<?php
+}
+?>
+
+```
+
+Not only can this be more difficult to read in an editor, but it implies either too much output in your logic code, or too much logic code in your output (best practice is to separate these using something like MVC), but it also hinders some forms of code hinting and support given by your IDE. 
+
+### <a name="if-statement-complexity"> </a>If Statement Complexity
+At times you may need to create quite complex conditions for your  `if`  statements like this:
+
+```php
+if($this->phase >= 1 &&
+   $this->country !== 'uk' &&
+   $this->country !== 'fr' &&
+   $this->country !== 'de')
+
+```
+
+However, this doesn't scale well and can be a bit of a pain to maintain. Given that three of these conditions are very similar, this could be shortened down to: 
+
+```php
+if($this->phase >= 1 &&
+   in_array($this->country, array('uk', 'fr', 'de') ) )
+
+```
+
+That change allows you to more easily manage the list of conditions. You should avoid too many conditions in your logic if you can; it's often always better to simplify things a little, both for the sanity of yourself and fellow developers, and to make the code more suited to be developed further in the future. 
+
+### <a name="database-schemas"> </a>Database Schemas
+While not strictly PHP, it's important that you can develop a well structured and flexible schema. This includes the following: 
+
+- Using the right database encodings. Generally using utf8 for your character set, and 
+
+- Selecting the right table engine. Typically, most MySQL tools default to MyISAM or InnoDB, but it's useful to know the differences between the two. MyISAM is faster for reads, slower for writes, and employs table-level locking on writes, which is a potential bottleneck. InnoDB is faster for writes, slower than MyISAM for reads, but employs row-level locking and allows you to use foreign key constraints.
+
+- Use the most appropriate field types. If you need a column for simple yes/no values, don't use 
+
+- Generate appropriate indexes on tables. Don't just index everything, but focus on the fields that you are going to be using in joins and searches. This can have a tremendous impact on your application when done correctly
+
+- Don't be too worried about multiple joins across tables to retrieve a dataset. With good indexes this won't be an issue, and embracing a good relational schema allows your data to be used in more flexible ways in the future as the nature of an application changes. It's also a lot faster than iterating over multiple content sets in PHP and attempting to perform the same actions there.
+
+- Wherever possible, join on integers (this includes dates and 
+
+- Give tables and their fields logical names that make sense. 
+
+- Plan your schema in advance and think about how different parts of the data interact with each other. Your database is not a spreadsheet, and you shouldn't treat it like it is.
 
 <a name="good-programming-practices"> </a>Good Programming Practices
 --------------------------
@@ -196,6 +266,35 @@ string(18) "a��♕♖♗♘♙"
 
 While the string replacement works for the  `$string`  variable, it breaks for  `$chess`  because the array syntax only works for plain ASCII strings, not any of the multibyte encodings.
 
+### <a name="be-aware-of-php-variable-types"> </a>Be Aware of PHP Variable Types
+Even though PHP is a loosely typed language, and will perform automatic type conversion under the hood (for more details of how it converts one type to another see [http://php.net/manual/en/types.comparisons.php](http://php.net/manual/en/types.comparisons.php) ), it is recommended to use the proper type that corresponds to the use you are putting the variables contents. For example, the following is how not to do dates in PHP:
+
+```php
+public $voteEndDates = array(
+    'en-gb' => array('y'=>'2015','m'=>'05','d'=>'30'),
+    'it-it' => array('y'=>'2015','m'=>'05','d'=>'21'),
+    'nl-nl' => array('y'=>'2015','m'=>'05','d'=>'29'),
+    'fr-fr' => array('y'=>'2015','m'=>'05','d'=>'29')
+);
+
+```
+
+This limits the use of the dates (for example, a time can't be added easily without re-writing all the code that uses these), and it's extra work through your codebase to explicitely convert to a proper timestamp when doing date-time comparisons. A better example would be: 
+
+```php
+public $voteEndDates = array(
+    'en-gb' => strtotime('2015-05-30 23:18:00'),
+    'it-it' => strtotime('2015-05-21'),
+    'nl-nl' => strtotime('2015-05-29'),
+    'fr-fr' => strtotime('2015-05-29'),
+);
+
+```
+
+This allows you to easily use the  `date()`  function elsewhere in your code to produce a time/date in any format you need, and very easily allows you to add a time to an existing date without any detrimental effects.
+
+*Note, that if you need to express dates outside of the normal range (e.g. 1901-2038 for 32-bit PHP on Linux/Unix or 1970-2038 for 32-bit PHP on Windows) then you should use the *
+
 ### <a name="clear-commenting"> </a>Clear Commenting
 If possible, all class methods and functions you write should be documented with PHPDoc syntax. This gives a consistent commenting style that can be used to generate documentation if needed. Try to be verbose in the comments if something is not immediately obvious, and explain all inputs and outputs. So, this would be an example of good commenting:
 
@@ -227,6 +326,25 @@ function _aportion_other(&$data, &$labels)
 
 ```
 
+### <a name="encoding-issues-&amp;-database"> </a>Encoding Issues &amp; Database
+To avoid unnecessary encoding issues ensure that all PHP scripts are saved as UTF8 files. Most editors and IDEs will do this automatically, although some on Windows platforms might need some 'encouragement' in this regard. Occassionally you might run into files saved as UTF8 not behaving correctly in the PHP parser. You should check to see if the file has been saved with a BOM (byte order mark) which has been known to cause strange output. That is usually enough to trigger Apache to output the right encoding headers, but if it's been set to a different default, or you're using PHP on IIS, then it may be necessary to use the following code to force the correct encoding:
+
+```php
+header('Content-Type: text/html; charset=utf-8');
+
+```
+
+Likewise, if you're using a MySQL database, ensure that the correct encoding is set there. MySQL has three levels of encoding: database, table, and field. Typically, setting it to  `utf8_general_ci`  when you create the database will ensure that it cascades down automatically when you create tables and fields. If you set it wrongly though, and attempt to retroactively correct it, you will need to do so at each level, as such changes only propagate downwards upon creation, not modification. You may also run into issues with the connection that PHP has with MySQL, which must also be made as UTF8. The exact implementation varies slightly for the different connection methods, PDO uses this for example: 
+
+```php
+$pdo = new PDO("mysql:dbname=$dbname;host=$dbhost",$dbuser,$dbpass, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'"));
+
+```
+
+Lastly, when creating tables, try to use the field types that are most appropriate for the data they will be carrying, so things like telephone numbers, email addresses, names, etc, will suit the varchar type, small finite lists suit an enum type, etc. It can be worth being overly generous when specifying lengths for varchar fields also; entries won't use more space than they need to, but it will prevent accidental truncation of data. As mentioned above, take care when inserting data into the database, and ensure that all data is properly filtered to prevent SQL injection. The best method is to use parameterised PDO queries, but if you're using a framework or platform it may have an abstracted interface for something like this. 
+
+**Avoid using the ** If you run into issues with the “headers already sent” error, and you're sure there is no output occurring before you're attempting a (either explicitly or implied)  `header()`  call, then check to see if you're editor/IDE has added a byte order mark (BOM). PHP doesn't play well with these, and it can trigger some unusual bugs, so BOMs should be removed whenever possible in source code. 
+
 ### <a name="frameworks-and-platforms"> </a>Frameworks and Platforms
 If you're using a framework or other platform you should follow the best practices of that to ensure code consistency. If it's an MVC framework, make sure your code is split accordingly, e.g. file and database access should be done only from within a model, not a controller, and view code shouldn't be in a controller either. If the framework/platform offers something like Eloquent or Active Record, then you should try to use that rather than roll your own database library. There may be some valid exceptions to this, such as queries that would be too complex to create in Active Record, or validation libraries that are sub-standard (e.g. CodeIgniters validation library), and it may just be more efficient to write your own methods.
 
@@ -248,15 +366,10 @@ Some of the CMS platforms we use are:
 
 - EZPublish
 
-### <a name="character-encoding"> </a>Character Encoding
-To avoid unnecessary encoding issues ensure that all PHP scripts are saved as UTF8 files. Most editors and IDEs will do this automatically, although some on Windows platforms might need some 'encouragement' in this regard. Occassionally you might run into files saved as UTF8 not behaving correctly in the PHP parser. You should check to see if the file has been saved with a BOM (byte order mark) which has been known to cause strange output.
+### <a name="reinventing-the-wheel"> </a>Reinventing the Wheel
+A good framework will provide nearly all of the tools you need to get your project done, from connecting to the database right the way through to enabling you to create multi-lingual websites. Unless you have a very strong and compelling reason not to utilise these built-in tools, you should not re-invent the respective wheels. Often these methods that come with the framework have been developed and updated over time to ensure they're fast and secure (the exception is with most of the things built into CodeIgniter, which is old and severely lacking in many areas.)
 
-That is usually enough to trigger Apache to output the right encoding headers, but if it's been set to a different default, or you're using PHP on IIS, then it may be necessary to use the following code to force the correct encoding:
-
-```php
-header('Content-Type: text/html; charset=utf-8');
-
-```
+For example, any good MVC framework will have some kind of database abstraction layer (be it Eloquent, Active Record, etc) which you should always use to communicate with the database. You should not attempt to roll your own queries with other PHP methods in such a case, as this may make your application less secure, and may make future development more difficult as you won't necessarily have a central point of your application you can debug in the case of application issues. 
 
 ### <a name="complicated-if-else-constructs"> </a>Complicated If Else Constructs
 An if/else construct should never go beyond a few else cases. If you're writing code with more than 2 or 3 else parts, then you should be using a switch/case instead.
@@ -278,38 +391,6 @@ switch(true)
 
 This slight abuse of the switch also works in JavaScript!
 
-<a name="databases"> </a>Databases
----------
-While not strictly PHP, it's important that you can develop a well structured and flexible schema. This includes the following:
-
-- Using the right database encodings. Generally using utf8 for your character set, and 
-
-- Selecting the right table engine. Typically, most MySQL tools default to MyISAM or InnoDB, but it's useful to know the differences between the two. MyISAM is faster for reads, slower for writes, and employs table-level locking on writes, which is a potential bottleneck. InnoDB is faster for writes, slower than MyISAM for reads, but employs row-level locking and allows you to use foreign key constraints.
-
-- Use the most appropriate field types. If you need a column for simple yes/no values, don't use 
-
-- Generate appropriate indexes on tables. Don't just index everything, but focus on the fields that you are going to be using in joins and searches. This can have a tremendous impact on your application when done correctly
-
-- Don't be too worried about multiple joins across tables to retrieve a dataset. With good indexes this won't be an issue, and embracing a good relational schema allows your data to be used in more flexible ways in the future as the nature of an application changes. It's also a 
-
-- Wherever possible, join on integers (this includes dates and 
-
-- Plan your schema in advance and think about how different parts of the data interact with each other. Your database is not a spreadsheet, and you shouldn't treat it like it is.
-
-### <a name="encoding-issues-&amp;-database"> </a>Encoding Issues &amp; Database
-It is always best to ensure that the correct encoding is set for your database(es). MySQL has three levels of encoding: database, table, and field. Typically, setting it to  `utf8_general_ci`  when you create the database will ensure that it cascades down automatically when you create tables and fields. If you set it wrongly though, and attempt to retroactively correct it, you will need to do so at each level, as such changes only propagate downwards upon creation, not modification. You may also run into issues with the connection that PHP has with MySQL, which must also be made as UTF8. The exact implementation varies slightly for the different connection methods, PDO uses this for example:
-
-```php
-$pdo = new PDO("mysql:dbname=$dbname;host=$dbhost",$dbuser,$dbpass, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'"));
-
-```
-
-Also, when creating tables, try to use the field types that are most appropriate for the data they will be carrying, so things like telephone numbers, email addresses, names, etc, will suit the varchar type, small finite lists suit an enum type, etc. It can be worth being overly generous when specifying lengths for varchar fields also; entries won't use more space than they need to, but it will prevent accidental truncation of data. As mentioned above, take care when inserting data into the database, and ensure that all data is properly filtered to prevent SQL injection. The best method is to use parameterised PDO queries, but if you're using a framework or platform it may have an abstracted interface for something like this.
-
-**Avoid using the** `mysql_*` **functions at all costs!**
-
-If you run into issues with the "headers already sent" error, and you're sure there is no output occurring before you're attempting a (either explicitly or implied)  `header()`  call, then check to see if your editor/IDE has added a byte order mark (BOM). PHP doesn't play well with these, and it can trigger some unusual bugs, so BOMs should be removed whenever possible in source code.
-
 <a name="security"> </a>Security
 --------
 ### <a name="treat-all-incoming-data-as-tainted"> </a>Treat All Incoming Data as Tainted
@@ -317,7 +398,7 @@ It's always important to remember that any data coming from the user has the pot
 
 - All form data – take advantage of the 
 
-- Select list values, checkbox &amp; radio button values, and hidden fields - just because you're setting these from code, does not mean that they will contain your predefined values when the form is submitted. Always check these values on the server.
+- Select list values, checkboxe &amp; radio button values, and hidden fields - just because you're setting these from code, does not mean that they will contain your predefined values when the form is submitted. Always check these values on the server.
 
 - URL query string parameters – as above, make sure these are filtered. So for example, tacking this onto a stock Joomla site URL would reveal an injection vulnerability with an unsanitised URL being output directly to the page: 
 
@@ -327,9 +408,13 @@ It's always important to remember that any data coming from the user has the pot
 
 - Cookie values can be tampered with, do not store anything important in them which you don't mind being altered, and do not rely on any value retrieved from a cookie.
 
-- Avoid incremental identifiers for sensitive information - rather than using an auto-incremented ID to retrieve information over the URL, consider using a GUID instead. Incremental IDs are an invitation for people to tamper, and could allow people to see information which is not intended for them. Sequential identifiers like this make it an easy task to guess more within an application, whereas a GUID is in effect random, and does not lead to more identifiers to be inferred easily.
+- Avoid incremental identifiers for sensitive information - rather than using an auto-incremented ID to retrieve information over the URL, consider using a GUID instead. Incremental IDs are an invitation for people to tamper, and could allow people to see information which is not intended for them.
 
 - Header values in a request can be altered, so do not rely on these to be untampered.
+
+- Data from remote APIs could be tainted, such as data coming in from Twitter. Never trust an API to have all the data sanitised to the level you need in your application, always perform your own sanitisation.
+
+- 
 
 #### <a name="do-not-reinvent-the-wheel"> </a>Do Not Reinvent the Wheel
 As tempting as it might be to write the best regular expression of your life to validate an email address, don't do it. It will never match the ISO specification, and it will be cumbersome to ever debug. Here's an example of a regular expression that is the closest case to matching the ISO specification for email address format [http://www.ex-parrot.com/pdw/Mail-RFC822-Address.html](http://www.ex-parrot.com/pdw/Mail-RFC822-Address.html) :
@@ -418,7 +503,7 @@ r\\]|\\.)*\](?:(?:\r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\]
 |(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*))*\>(?:(
 ?:\r\n)?[ \t])*))*)?;\s*)
 ` 
-This is not something you want in your code, ever. Use the filter_var() function, which has email validation support built in. 
+This is not something you want in your code, ever. Use the  `filter_var()` 	function, which has email validation support built in. 
 
 ### <a name="sql-injection"> </a>SQL Injection
 You should always use a method of connecting to a database that offers some form of protection against SQL injection, whether it be through parameterised queries, or prepared statements. You should never use the deprecated  `mysql_*`  functions, as these are old and not secure. Note that use of stored procedures does not protect against SQL injection. A recent webex by Jerry Hoff from White Hat Security explicitely mentioned that parameterised queries were the defacto way to protect against SQL injection. 
@@ -460,6 +545,17 @@ function remove_headers($string)
 ```
 
 This will at the least ensure that the user is not injecting an extra  `Cc`  header, for example, into your email code, which could be used to send out their message to more recipients using your email server! 
+
+### <a name="accidental-validation-exclusions"> </a>Accidental Validation Exclusions
+When developing your application and adding in your validation routines to user-generated input, it can be easy to fall into the trap of being too strict with what you allow through. Consider the following two examples:
+
+```php
+$forename_valid = preg_match("/^[a-zA-Z'-]+$/", $forename);
+$email_valid    = preg_match("/^[a-zA-Z0-9]+@[a-zA-Z0-9][a-zA-Z0-9\.]+[a-zA-Z]$/", $email);
+
+```
+
+More details on  `filter_var()`  can be found at [http://php.net/manual/en/function.filter-var.php](http://php.net/manual/en/function.filter-var.php) , and more details on Unicode in regular expressions can be found at [http://php.net/manual/en/regexp.reference.unicode.php](http://php.net/manual/en/regexp.reference.unicode.php).
 
 <a name="local-development-environment"> </a>Local Development Environment
 -----------------------------

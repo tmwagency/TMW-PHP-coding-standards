@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:strip-space elements="*"/>
+<xsl:output omit-xml-declaration="yes"/>
 
 <xsl:template match="/coding_standards">
 	<xsl:apply-templates select="title" mode="title"/>
@@ -79,9 +80,10 @@
 
 <!-- main title -->
 <xsl:template match="title" mode="title">
+<xsl:text>&#xa;# </xsl:text>
 <xsl:value-of select="text()"/>
 <xsl:text>&#xa;</xsl:text>
-<xsl:value-of select="substring('================================================================================================================================================', 1, string-length(text()))"/>
+<!--<xsl:value-of select="substring('================================================================================================================================================', 1, string-length(text()))"/>-->
 </xsl:template>
 
 <!-- table of content templates -->
