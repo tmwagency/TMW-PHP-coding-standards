@@ -341,8 +341,8 @@ It's always important to remember that any data coming from the user has the pot
 
 ==== Do Not Reinvent the Wheel ====
 As tempting as it might be to write the best regular expression of your life to validate an email address, don't do it. It will never match the ISO specification, and it will be cumbersome to ever debug. Here's an example of a regular expression that is the closest case to matching the ISO specification for email address format [http://www.ex-parrot.com/pdw/Mail-RFC822-Address.html, http://www.ex-parrot.com/pdw/Mail-RFC822-Address.html] :
-<code>
-		
+
+<pre>
 (?:(?:\r\n)?[ \t])*(?:(?:(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t]
 )+|\Z|(?=[\["()<>@,;:\\".\[\]]))|"(?:[^\"\r\\]|\\.|(?:(?:\r\n)?[ \t]))*"(?:(?:
 \r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(
@@ -425,7 +425,8 @@ r\\]|\\.)*\](?:(?:\r\n)?[ \t])*)(?:\.(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\]
 .(?:(?:\r\n)?[ \t])*(?:[^()<>@,;:\\".\[\] \000-\031]+(?:(?:(?:\r\n)?[ \t])+|\Z
 |(?=[\["()<>@,;:\\".\[\]]))|\[([^\[\]\r\\]|\\.)*\](?:(?:\r\n)?[ \t])*))*\>(?:(
 ?:\r\n)?[ \t])*))*)?;\s*)
-</code>
+</pre>
+
 This is not something you want in your code, ever. Use the <code>filter_var()</code>	function, which has email validation support built in. 
 
 === SQL Injection ===
@@ -475,6 +476,8 @@ When developing your application and adding in your validation routines to user-
 $forename_valid = preg_match("/^[a-zA-Z'-]+$/", $forename);
 $email_valid    = preg_match("/^[a-zA-Z0-9]+@[a-zA-Z0-9][a-zA-Z0-9\.]+[a-zA-Z]$/", $email);
 </pre>
+
+These regular expressions will limit your <code>$forename</code> and <code>$email</code> checks to only ASCII characters, which will prevent people like Reneé or Zoë from entering your form, and will block a lot of perfectly valid email addresses. It's far better to validate with UTF8 character classes, such as <code>\p{L}</code> instead.
 
 More details on <code>filter_var()</code> can be found at [http://php.net/manual/en/function.filter-var.php, http://php.net/manual/en/function.filter-var.php] , and more details on Unicode in regular expressions can be found at [http://php.net/manual/en/regexp.reference.unicode.php, http://php.net/manual/en/regexp.reference.unicode.php].
 

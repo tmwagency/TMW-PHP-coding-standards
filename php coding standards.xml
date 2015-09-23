@@ -426,7 +426,9 @@ function remove_headers($string)
 $forename_valid = preg_match("/^[a-zA-Z'-]+$/", $forename);
 $email_valid    = preg_match("/^[a-zA-Z0-9]+@[a-zA-Z0-9][a-zA-Z0-9\.]+[a-zA-Z]$/", $email);
 ]]></code>
-<p>More details on <code>filter_var()</code> can be found at <a href="http://php.net/manual/en/function.filter-var.php">http://php.net/manual/en/function.filter-var.php</a> , and more details on Unicode in regular expressions can be found at <a href="http://php.net/manual/en/regexp.reference.unicode.php">http://php.net/manual/en/regexp.reference.unicode.php</a>.</p>
+
+		<p>These regular expressions will limit your <code>$forename</code> and <code>$email</code> checks to only ASCII characters, which will prevent people like Reneé or Zoë from entering your form, and will block a lot of perfectly valid email addresses. It's far better to validate with UTF8 character classes, such as <code>\p{L}</code> instead.</p>
+		<p>More details on <code>filter_var()</code> can be found at <a href="http://php.net/manual/en/function.filter-var.php">http://php.net/manual/en/function.filter-var.php</a> , and more details on Unicode in regular expressions can be found at <a href="http://php.net/manual/en/regexp.reference.unicode.php">http://php.net/manual/en/regexp.reference.unicode.php</a>.</p>
 	</section>
 	
 	<section title="Local Development Environment">

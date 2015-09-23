@@ -557,6 +557,8 @@ $email_valid    = preg_match("/^[a-zA-Z0-9]+@[a-zA-Z0-9][a-zA-Z0-9\.]+[a-zA-Z]$/
 
 ```
 
+These regular expressions will limit your  `$forename`  and  `$email`  checks to only ASCII characters, which will prevent people like Reneé or Zoë from entering your form, and will block a lot of perfectly valid email addresses. It's far better to validate with UTF8 character classes, such as  `\p{L}`  instead.
+
 More details on  `filter_var()`  can be found at [http://php.net/manual/en/function.filter-var.php](http://php.net/manual/en/function.filter-var.php) , and more details on Unicode in regular expressions can be found at [http://php.net/manual/en/regexp.reference.unicode.php](http://php.net/manual/en/regexp.reference.unicode.php).
 
 <a name="local-development-environment"> </a>Local Development Environment
