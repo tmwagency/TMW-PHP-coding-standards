@@ -410,6 +410,7 @@ class TMW_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeSniffer
                     $foundIndent = strlen($tokens[$i]['content']);
                 }
 
+                /*
                 if ($foundIndent < $expectedIndent
                     || ($exact === true
                     && $expectedIndent !== $foundIndent)
@@ -435,6 +436,7 @@ class TMW_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeSniffer
                         }
                     }
                 }//end if
+                */
             }//end if
 
             // Turn off exact indent matching for some structures that typically

@@ -9,13 +9,6 @@
 		<exclude name="PEAR.Commenting.ClassComment"/>
 	</rule>
 	<rule ref="PEAR.Files"/>
-	<rule ref="PEAR.Functions">
-		<exclude name="PEAR.Functions.FunctionCallSignature"/>
-	</rule>
-	<rule ref="PEAR.NamingConventions">
-		<exclude name="PEAR.NamingConventions.ValidClassName"/>
-		<exclude name="PEAR.NamingConventions.ValidFunctionName"/>
-	</rule>
 
 	<!-- Generic Rules -->
 	<rule ref="Generic.CodeAnalysis.EmptyStatement"/>
@@ -66,9 +59,7 @@
 	<rule ref="Squiz.PHP.GlobalKeyword"/>
 	<rule ref="Squiz.PHP.InnerFunctions"/>
 	<rule ref="Squiz.Scope"/>
-	<rule ref="Squiz.Strings">
-		<exclude name="Squiz.Strings.ConcatenationSpacing"/>
-	</rule>
+	<rule ref="Squiz.Strings.EchoedStrings"/>
 	<rule ref="Squiz.WhiteSpace.LanguageConstructSpacing"/>
 	<rule ref="Squiz.WhiteSpace.MemberVarSpacing"/>
 	<rule ref="Squiz.WhiteSpace.ScopeClosingBrace"/>
