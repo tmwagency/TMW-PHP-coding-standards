@@ -39,7 +39,9 @@
 	<!-- Squiz Rules -->
 	<rule ref="Squiz.Arrays.ArrayBracketSpacing"/>
 	<rule ref="Squiz.Classes">
+		<exclude name="Squiz.Classes.ClassDeclaration"/>
 		<exclude name="Squiz.Classes.DuplicateProperty"/>
+		<exclude name="Squiz.Classes.ClassFileName"/>
 		<exclude name="Squiz.Classes.ValidClassName"/>
 	</rule>
 	<rule ref="Squiz.Commenting.EmptyCatchComment"/>
@@ -55,13 +57,11 @@
 	<rule ref="Squiz.PHP.DiscouragedFunctions"/>
 	<rule ref="Squiz.PHP.EmbeddedPhp"/>
 	<rule ref="Squiz.PHP.Eval"/>
-	<rule ref="Squiz.PHP.ForbiddenFunctions"/>
 	<rule ref="Squiz.PHP.GlobalKeyword"/>
 	<rule ref="Squiz.PHP.InnerFunctions"/>
 	<rule ref="Squiz.Scope"/>
 	<rule ref="Squiz.Strings.EchoedStrings"/>
 	<rule ref="Squiz.WhiteSpace.LanguageConstructSpacing"/>
-	<rule ref="Squiz.WhiteSpace.MemberVarSpacing"/>
 	<rule ref="Squiz.WhiteSpace.ScopeClosingBrace"/>
 	<rule ref="Squiz.WhiteSpace.ScopeKeywordSpacing"/>
 	<rule ref="Squiz.WhiteSpace.SemicolonSpacing"/>
