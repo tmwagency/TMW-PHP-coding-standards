@@ -41,7 +41,6 @@ class TMW_Sniffs_Functions_ForbiddenFunctionsSniff implements PHP_CodeSniffer_Sn
      */
     public $forbiddenFunctions = array(
 		'eval' => null,
-		'range' => 'Iterator',
 		'mysql_affected_rows' => 'PDO',
 		'mysql_client_encoding' => 'PDO',
 		'mysql_close' => 'PDO',
